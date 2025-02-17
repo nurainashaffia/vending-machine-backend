@@ -81,6 +81,16 @@ public class SlotService {
         return slot;
     }
 
+    public Slot updateSlotStatus(Long slotId, SlotStatus slotStatus) {
+        Slot slot = slotRepository.findById(slotId)
+                .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
+
+        slot.setSlotStatus(slotStatus);
+        slotRepository.save(slot);
+
+        return slot;
+    }
+
     public void deleteSlotById(Long slotId) {
         Slot slot = slotRepository.findById(slotId)
                         .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));

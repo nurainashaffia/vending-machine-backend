@@ -1,6 +1,8 @@
 package com.aina.vending_machine.service;
 
+import com.aina.vending_machine.enums.SlotStatus;
 import com.aina.vending_machine.exception.InsufficientStockException;
+import com.aina.vending_machine.exception.OutOfServiceException;
 import com.aina.vending_machine.model.Item;
 import com.aina.vending_machine.model.Slot;
 import com.aina.vending_machine.model.Transaction;
@@ -32,6 +34,8 @@ public class TransactionService {
 
         if (slot.getItem() == null) {
             throw new ResourceNotFoundException("Slot with Id " + slotId + " is not assigned with any item.");
+        } else if (slot.getSlotStatus() == SlotStatus.OUT_OF_SERVICE) {
+            throw new OutOfServiceException("Slot with Id " + slotId + " is OUT OF SERVICE.");
         } else if (slot.getCapacity() <= 0) {
             throw new InsufficientStockException("Insufficient stock for item with Id " + itemId);
         } else {

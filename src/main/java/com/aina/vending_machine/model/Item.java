@@ -25,20 +25,14 @@ public class Item {
     @JsonManagedReference
     private List<Slot> slots = new ArrayList<>();
 
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-//    private List<Transaction> transactions = new ArrayList<>();
-
     public Item() {
     }
 
-    public Item(String itemName, double itemPrice, Long itemStock, List<Slot> slots, List<Transaction> transactions) {
+    public Item(String itemName, double itemPrice, Long itemStock, List<Slot> slots) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemStock = itemStock;
         this.slots = slots;
-//        this.transactions = transactions;
     }
 
     public void setItemName(String itemName) {
@@ -56,10 +50,6 @@ public class Item {
     public void setSlots(List<Slot> slots) {
         this.slots = slots;
     }
-
-//    public void setTransactions(List<Transaction> transactions) {
-//        this.transactions = transactions;
-//    }
 
     @JsonProperty("itemId")
     public Long getItemId() {
@@ -81,10 +71,6 @@ public class Item {
     public List<Slot> getSlots() {
         return slots;
     }
-
-//    public List<Transaction> getTransactions() {
-//        return transactions;
-//    }
 
     @Override
     public String toString() {

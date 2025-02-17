@@ -16,7 +16,7 @@ public interface SlotRepository extends JpaRepository <Slot, Long> {
 
     public List<Slot> findByCapacity(int capacity);
 
-    @Query("select s from Slot s join s.item i where s.slotStatus = :status and s.capacity < :capacity and i.itemStock >= s.capacity")
+    @Query("select s from Slot s join s.item i where s.slotStatus = :slotStatus and s.capacity < :capacity and i.itemStock >= s.capacity")
     public List<Slot> searchRestockableSlots(@Param("slotStatus") SlotStatus status, @Param("capacity") int capacity);
 
     @Query("select s from Slot s join s.item i where s.capacity < :capacity and i.itemStock < s.capacity")

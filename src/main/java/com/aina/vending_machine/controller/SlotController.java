@@ -53,7 +53,7 @@ public class SlotController {
     }
 
     @GetMapping("search-restockable")
-    public List<Slot> searchRestockableSlots(@RequestParam(defaultValue = "${slot.fullCapacity}") SlotStatus slotStatus, @RequestParam(defaultValue = "10") int capacity) {
+    public List<Slot> searchRestockableSlots(@RequestParam(defaultValue = "AVAILABLE") SlotStatus slotStatus, @RequestParam(defaultValue = "${slot.fullCapacity}") int capacity) {
         return slotRepository.searchRestockableSlots(slotStatus, capacity);
     }
 
@@ -65,6 +65,12 @@ public class SlotController {
     @PatchMapping("restock/{slotId}")
     public ResponseEntity<Slot> updateSlotsToRestock(@PathVariable Long slotId) {
         Slot slot = slotService.updateSlotBySlotId(slotId);
+        return ResponseEntity.ok(slot);
+    }
+
+    @PatchMapping("updateStatus/{slotId}/{slotStatus}")
+    public ResponseEntity<Slot> updateSlotStatus(@PathVariable Long slotId, @PathVariable SlotStatus slotStatus) {
+        Slot slot = slotService.updateSlotStatus(slotId, slotStatus);
         return ResponseEntity.ok(slot);
     }
 
