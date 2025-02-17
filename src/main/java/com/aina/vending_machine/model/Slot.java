@@ -3,10 +3,9 @@ package com.aina.vending_machine.model;
 import com.aina.vending_machine.enums.SlotStatus;
 import java.util.List;
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.*;
 
 @Entity
 public class Slot {
