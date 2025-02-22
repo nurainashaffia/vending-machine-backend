@@ -2,26 +2,30 @@ package com.aina.vending_machine.model;
 
 import java.util.List;
 import java.util.ArrayList;
+
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@JsonPropertyOrder({"itemId", "itemName", "itemPrice", "itemStock", "slots"})
+//@JsonPropertyOrder({"itemId", "itemName", "itemPrice", "itemStock", "slots"})
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemId;
+
     @Column(nullable = false)
     private String itemName;
+
     @Column(nullable = false)
+
     private double itemPrice;
+
     private Long itemStock;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     @JsonManagedReference
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Slot> slots = new ArrayList<>();
 
     public Item() {
@@ -67,6 +71,7 @@ public class Item {
         return itemStock;
     }
 
+    @JsonIgnore
     public List<Slot> getSlots() {
         return slots;
     }

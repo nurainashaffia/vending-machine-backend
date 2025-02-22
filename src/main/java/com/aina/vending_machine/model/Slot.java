@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.*;
 
 @Entity
+@JsonPropertyOrder({"slotId", "slotStatus", "capacity", "lastRestocked", "itemId", "transactionId"})
 public class Slot {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,9 +25,35 @@ public class Slot {
     @JsonBackReference
     private Item item;
 
+    @JsonProperty("itemId")
+    public Long getItemId() {
+        return this.item != null ? this.item.getItemId() : null;
+    }
+
+    @JsonProperty("itemName")
+    public String getItemName() {
+        return item != null ? item.getItemName() : null;
+    }
+
+    @JsonProperty("itemPrice")
+    public double getItemPrice() {
+        return item != null ? item.getItemPrice() : 0;
+    }
+
+    @JsonProperty("transactionId")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public List<Long> getTransactionIds() {
+        List<Long> transactionIds = new ArrayList<>();
+        for (Transaction transaction : transactions) {
+            transactionIds.add(transaction.getTransactionId());
+        }
+        return transactionIds;
+    }
+
+    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<Transaction> transactions = new ArrayList<>();
 
     public Slot() {
@@ -53,9 +80,19 @@ public class Slot {
     }
 
     public void setItem(Item item) {
+        if (this.item != null) {
+            this.item.getSlots().remove(this);
+        }
+
         this.item = item;
-        if (!item.getSlots().contains(this)) {
-            item.getSlots().add(this);
+
+        if (item != null) {
+            if (item.getSlots() == null) {
+                item.setSlots(new ArrayList<>());
+            }
+            if (!item.getSlots().contains(this)) {
+                item.getSlots().add(this);
+            }
         }
     }
 
@@ -84,10 +121,6 @@ public class Slot {
     }
 
     @JsonIgnore
-    public Long getItemId() {
-        return this.item != null ? this.item.getItemId() : null;
-    }
-
     public List<Transaction> getTransactions() {
         return transactions;
     }

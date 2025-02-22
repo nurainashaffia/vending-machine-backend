@@ -76,6 +76,8 @@ public class SlotService {
                 throw new InsufficientStockException("Insufficient stock! Item with Id " + item.getItemId() +
                         " has a total of " + item.getItemStock() + " remaining stock quantity.");
             }
+        } else {
+            throw(new ResourceNotFoundException("Slot status is not AVAILABLE"));
         }
 
         return slot;
@@ -91,10 +93,15 @@ public class SlotService {
         return slot;
     }
 
-    public void deleteSlotById(Long slotId) {
+    public Slot deleteItemBySlotId(Long slotId) {
         Slot slot = slotRepository.findById(slotId)
                         .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
 
-        slotRepository.delete(slot);
+        if (slot.getItemId() != null)
+            slot.setItem(null);
+
+        slotRepository.save(slot);
+
+        return slot;
     }
 }

@@ -30,6 +30,11 @@ public class ItemController {
         return itemRepository.findAll();
     }
 
+    @GetMapping("/find-assigned")
+    public List<Item> getAssignedItems() {
+        return itemRepository.findBySlotsIsNotEmpty();
+    }
+
     @GetMapping("/find/{itemId}")
     public ResponseEntity<Item> find(@PathVariable Long itemId) {
         Item item = itemService.findItemById(itemId);

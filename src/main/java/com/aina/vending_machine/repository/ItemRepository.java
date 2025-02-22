@@ -12,6 +12,8 @@ public interface ItemRepository extends JpaRepository <Item, Long> {
     @Query("select i from Item i where lower(i.itemName) like lower(concat('%',:itemName,'%'))")
     public List<Item> search(String itemName);
 
+    public List<Item> findBySlotsIsNotEmpty();
+
     List<Item> findByItemNameContainingIgnoreCase(String itemName);
 
     List<Item> findByItemStockLessThan(Long itemStock);

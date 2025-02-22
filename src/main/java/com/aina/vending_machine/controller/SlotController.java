@@ -74,8 +74,8 @@ public class SlotController {
     }
 
     @DeleteMapping("/delete/{slotId}")
-    public ResponseEntity<Void> deleteSlot(@PathVariable Long slotId) {
-        slotService.deleteSlotById(slotId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Slot> deleteSlot(@PathVariable Long slotId) {
+        Slot slot = slotService.deleteItemBySlotId(slotId);
+        return ResponseEntity.ok(slot);
     }
 }

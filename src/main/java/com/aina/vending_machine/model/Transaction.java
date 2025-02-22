@@ -1,5 +1,7 @@
 package com.aina.vending_machine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -59,6 +61,16 @@ public class Transaction {
 
     public Slot getSlot() {
         return slot;
+    }
+
+    @JsonProperty("itemId")
+    public Long getItemId() {
+        return item != null ? item.getItemId() : null;
+    }
+
+    @JsonProperty("slotId")
+    public Long getSlotId() {
+        return slot != null ? slot.getSlotId() : null;
     }
 
     @Override
