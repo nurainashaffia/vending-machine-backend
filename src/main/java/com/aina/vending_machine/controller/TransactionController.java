@@ -1,5 +1,6 @@
 package com.aina.vending_machine.controller;
 
+import com.aina.vending_machine.model.Slot;
 import com.aina.vending_machine.model.Transaction;
 import com.aina.vending_machine.service.TransactionService;
 import com.aina.vending_machine.repository.ItemRepository;
@@ -36,5 +37,11 @@ public class TransactionController {
     @GetMapping("/find-all")
     public List<Transaction> getTransactions() {
         return transactionRepository.findAll();
+    }
+
+    @GetMapping("/find/{transactionId}")
+    public ResponseEntity<Transaction> find(@PathVariable Long transactionId) {
+        Transaction transaction = transactionService.findTransactionById(transactionId);
+        return ResponseEntity.ok(transaction);
     }
 }

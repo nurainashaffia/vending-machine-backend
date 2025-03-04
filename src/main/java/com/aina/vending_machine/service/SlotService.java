@@ -1,5 +1,6 @@
 package com.aina.vending_machine.service;
 
+import com.aina.vending_machine.exception.InsufficientCapacityException;
 import com.aina.vending_machine.model.Item;
 import com.aina.vending_machine.model.Slot;
 import com.aina.vending_machine.enums.SlotStatus;
@@ -34,7 +35,7 @@ public class SlotService {
 
             if (item.getItemStock() < slot.getCapacity()) {
                 throw new InsufficientStockException("Insufficient stock! Item with Id " + itemId +
-                        " has a total of " + item.getItemStock() + " remaining stock quantity.");
+                        " has a total of " + item.getItemStock() + " remaining stock quantity");
             } else {
                 slot.setItem(item);
                 item.setItemStock(item.getItemStock() - slot.getCapacity());
@@ -50,36 +51,48 @@ public class SlotService {
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
     }
 
-    public Slot updateSlotBySlotId(Long slotId) {
+    public Slot updateSlot(Long slotId, Integer capacity, SlotStatus slotStatus, Long itemId) {
         Slot slot = slotRepository.findById(slotId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
 
-        if (slot.getSlotStatus() == SlotStatus.AVAILABLE) {
-            Item item = slot.getItem();
+        Item item = slot.getItem();
 
-            if (item == null) {
-                item = itemRepository.findFirstByItemStockGreaterThanEqual(slot.getCapacity())  // Changed: Simplified this check
-                        .orElseThrow(() -> new ResourceNotFoundException("No available items with sufficient stock"));
+        if (itemId != null) {
+            item = itemRepository.findById(itemId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Item not found with Id " + itemId));
 
-                slot.setItem(item);
-            }
-
-            int qtyToRestock = fullCapacity - slot.getCapacity();
-
-            if (item.getItemStock() >= qtyToRestock) {
-                slot.setCapacity(fullCapacity);
-                item.setItemStock(item.getItemStock() - qtyToRestock);
-
-                slotRepository.save(slot);
-                itemRepository.save(item);
-            } else {
-                throw new InsufficientStockException("Insufficient stock! Item with Id " + item.getItemId() +
-                        " has a total of " + item.getItemStock() + " remaining stock quantity.");
-            }
-        } else {
-            throw(new ResourceNotFoundException("Slot status is not AVAILABLE"));
+            slot.setItem(item);
         }
 
+        if (capacity != null) {
+            if (capacity > fullCapacity) {
+                throw new InsufficientCapacityException("The maximum capacity for a slot is " + fullCapacity);
+            }
+
+            int qtyToRestock = capacity - slot.getCapacity();
+            if (qtyToRestock > 0) {
+                if (item == null) {
+                    throw new ResourceNotFoundException("No item is selected.");
+                }
+                if (item.getItemStock() < qtyToRestock) {
+                    throw new InsufficientStockException("Insufficient stock! Item with Id " + item.getItemId() +
+                            " has only " + item.getItemStock() + " remaining stock quantity");
+                }
+
+                item.setItemStock(item.getItemStock() - qtyToRestock);
+                slot.setCapacity(capacity);
+
+                itemRepository.save(item);
+            } else {
+                throw new IllegalArgumentException("Capacity inserted is lower than the current capacity");
+            }
+        }
+
+        if (slotStatus != null) {
+            slot.setSlotStatus(slotStatus);
+        }
+
+        slotRepository.save(slot);
         return slot;
     }
 
@@ -95,13 +108,15 @@ public class SlotService {
 
     public Slot deleteItemBySlotId(Long slotId) {
         Slot slot = slotRepository.findById(slotId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
+                .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
 
-        if (slot.getItemId() != null)
+        if (slot.getItem() != null) {
             slot.setItem(null);
+            slot.setCapacity(0);
+            slot.setSlotStatus(SlotStatus.AVAILABLE);
+            slot.setLastRestocked(null);
+        }
 
-        slotRepository.save(slot);
-
-        return slot;
+        return slotRepository.save(slot);
     }
 }

@@ -53,7 +53,6 @@ public class Slot {
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
     private List<Transaction> transactions = new ArrayList<>();
 
     public Slot() {
@@ -65,6 +64,10 @@ public class Slot {
         this.lastRestocked = lastRestocked;
         this.item = item;
         this.transactions = transactions;
+    }
+
+    public void setSlotId(Long slotId) {
+        this.slotId = slotId;
     }
 
     public void setCapacity(int capacity) {

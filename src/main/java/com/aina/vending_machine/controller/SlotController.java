@@ -1,5 +1,6 @@
 package com.aina.vending_machine.controller;
 
+import com.aina.vending_machine.exception.ResourceNotFoundException;
 import com.aina.vending_machine.model.Slot;
 import com.aina.vending_machine.enums.SlotStatus;
 import com.aina.vending_machine.service.SlotService;
@@ -61,10 +62,10 @@ public class SlotController {
         return slotRepository.searchNonRestockableSlots(capacity);
     }
 
-    @PatchMapping("restock/{slotId}")
-    public ResponseEntity<Slot> updateSlotsToRestock(@PathVariable Long slotId) {
-        Slot slot = slotService.updateSlotBySlotId(slotId);
-        return ResponseEntity.ok(slot);
+    @PatchMapping("update/{slotId}")
+    public ResponseEntity<Slot> updateSlot(@PathVariable Long slotId, @RequestParam(required = false) Integer capacity, @RequestParam(required = false) SlotStatus slotStatus, @RequestParam(required = false) Long itemId) {
+        Slot updatedSlot = slotService.updateSlot(slotId, capacity, slotStatus, itemId);
+        return ResponseEntity.ok(updatedSlot);
     }
 
     @PatchMapping("updateStatus/{slotId}/{slotStatus}")

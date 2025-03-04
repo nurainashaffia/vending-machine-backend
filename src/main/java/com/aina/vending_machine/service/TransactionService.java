@@ -33,7 +33,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
 
         if (slot.getItem() == null) {
-            throw new ResourceNotFoundException("Slot with Id " + slotId + " is not assigned with any item.");
+            throw new ResourceNotFoundException("Slot with Id " + slotId + " is not assigned with any item");
         } else if (slot.getSlotStatus() == SlotStatus.OUT_OF_SERVICE) {
             throw new OutOfServiceException("Slot with Id " + slotId + " is OUT OF SERVICE.");
         } else if (slot.getCapacity() <= 0) {
@@ -44,28 +44,10 @@ public class TransactionService {
             transactionRepository.save(transaction);
             return transaction;
         }
-
-        // TODO: stock becomes negative
-        // TODO: stock lebih dari 10
     }
 
-//    public Transaction createTransaction(Long itemId, Long slotId) {
-//        Item item = itemRepository.findById(itemId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Item not found with Id " + itemId));
-//
-//        Slot slot = slotRepository.findById(slotId)
-//                        .orElseThrow(() -> new ResourceNotFoundException("Slot not found with Id " + slotId));
-//
-//        if (slot.getItem() == null) {
-//            throw new ResourceNotFoundException("Slot with Id " + slotId + " is not assigned with any item.");
-//        } else {
-//            Transaction transaction = new Transaction(LocalDateTime.now(), item, slot);
-//            item.setItemStock(item.getItemStock() - 1);
-//            slot.setCapacity(slot.getCapacity() + 1);
-//            transactionRepository.save(transaction);
-//            return transaction;
-//        }
-//
-//        // TODO: stock becomes negative
-//    }
+    public Transaction findTransactionById(Long transactionId) {
+        return transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with Id " + transactionId));
+    }
 }

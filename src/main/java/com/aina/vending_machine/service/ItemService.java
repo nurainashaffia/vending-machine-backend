@@ -13,9 +13,9 @@ public class ItemService {
 
     public Item createItem(Item item) {
         if (item.getItemName() == null || item.getItemName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Item name cannot be null or empty.");
+            throw new IllegalArgumentException("Item name cannot be null or empty");
         } else if (item.getItemPrice() <= 0) {
-            throw new IllegalArgumentException("Item price must be greater than zero.");
+            throw new IllegalArgumentException("Item price must be greater than zero");
         }
 
         itemRepository.save(item);
