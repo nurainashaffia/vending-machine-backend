@@ -73,6 +73,9 @@ public class Transaction {
         return slot != null ? slot.getSlotId() : null;
     }
 
+    @JsonProperty("itemPrice")
+    public double GetItemPrice() { return item != null ? item.getItemPrice() : 0.00; }
+
     @Override
     public String toString() {
         return "Transaction{" +

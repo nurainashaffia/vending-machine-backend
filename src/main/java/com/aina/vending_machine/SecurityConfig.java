@@ -12,26 +12,20 @@
 //@EnableWebSecurity
 //public class SecurityConfig {
 //
-//    // Security Filter Chain bean configuration
 //    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        http
-//                // Disable CSRF (for APIs)
-//                .csrf(csrf -> csrf.disable())
-//
-//                // Define the authorization rules
-//                .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers("/api/**").authenticated()  // Secure /api/** endpoints
-//                        .requestMatchers("/public/**").permitAll()   // Public endpoints
-//                )
-//
-//                // Use HTTP Basic Authentication
-//                .httpBasic(httpBasic -> httpBasic.disable());  // Disable basic HTTP auth (if needed, you can configure it)
+//                .csrf().disable() // Disable CSRF protection for API calls
+//                .authorizeHttpRequests()
+//                .requestMatchers("/api/login/admin").permitAll()  // Allow access to the login endpoint
+//                .anyRequest().authenticated()  // All other requests must be authenticated
+//                .and()
+//                .formLogin().disable(); // Disable Spring's default login page
 //
 //        return http.build();
 //    }
 //
-//    // PasswordEncoder Bean (for BCrypt encryption)
+//    // Password Encoder Bean (if needed)
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();

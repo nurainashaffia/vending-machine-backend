@@ -40,6 +40,11 @@ public class Slot {
         return item != null ? item.getItemPrice() : 0;
     }
 
+    @JsonProperty("itemStock")
+    public double getItemStock() {
+        return item != null ? item.getItemStock() : 0;
+    }
+
     @JsonProperty("transactionId")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public List<Long> getTransactionIds() {

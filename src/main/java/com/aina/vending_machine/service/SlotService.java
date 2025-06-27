@@ -83,15 +83,17 @@ public class SlotService {
                 slot.setCapacity(capacity);
 
                 itemRepository.save(item);
-            } else {
-                throw new IllegalArgumentException("Capacity inserted is lower than the current capacity");
             }
+//            } else {
+//                throw new IllegalArgumentException("Capacity inserted is lower than the current capacity");
+//            }
         }
 
         if (slotStatus != null) {
             slot.setSlotStatus(slotStatus);
         }
 
+        slot.setLastRestocked(LocalDateTime.now());
         slotRepository.save(slot);
         return slot;
     }

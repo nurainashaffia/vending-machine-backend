@@ -44,4 +44,10 @@ public class TransactionController {
         Transaction transaction = transactionService.findTransactionById(transactionId);
         return ResponseEntity.ok(transaction);
     }
+
+    @DeleteMapping("/delete/{transactionId}")
+    public  ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {
+        transactionService.deleteTransactionById(transactionId);
+        return  ResponseEntity.noContent().build();
+    }
 }

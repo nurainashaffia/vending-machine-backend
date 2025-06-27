@@ -3,6 +3,8 @@ package com.aina.vending_machine.service;
 import com.aina.vending_machine.model.Item;
 import com.aina.vending_machine.repository.ItemRepository;
 import com.aina.vending_machine.exception.ResourceNotFoundException;
+import com.aina.vending_machine.repository.SlotRepository;
+import com.aina.vending_machine.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,6 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ItemService {
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private SlotRepository slotRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public Item createItem(Item item) {
         if (item.getItemName() == null || item.getItemName().trim().isEmpty()) {
@@ -40,6 +48,8 @@ public class ItemService {
             throw new ResourceNotFoundException("Item not found with Id " + itemId);
         }
 
+        transactionRepository.clearItemFromTransactions(itemId);
+        slotRepository.clearItemFromSlots(itemId);
         itemRepository.deleteById(itemId);
     }
 }

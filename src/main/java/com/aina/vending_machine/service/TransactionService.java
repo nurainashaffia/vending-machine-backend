@@ -50,4 +50,12 @@ public class TransactionService {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with Id " + transactionId));
     }
+
+    public void deleteTransactionById(Long transactionId) {
+        if (!transactionRepository.existsById((transactionId))) {
+            throw new ResourceNotFoundException("Transaction not found with Id " + transactionId);
+        }
+
+        transactionRepository.deleteById(transactionId);
+    }
 }
