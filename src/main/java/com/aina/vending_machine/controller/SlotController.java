@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@RequestMapping("/api/slots")
+@RequestMapping("/slots")
 @RestController
 @CrossOrigin
 public class SlotController {

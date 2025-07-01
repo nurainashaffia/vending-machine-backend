@@ -17,7 +17,7 @@
 //        http
 //                .csrf().disable() // Disable CSRF protection for API calls
 //                .authorizeHttpRequests()
-//                .requestMatchers("/api/login/admin").permitAll()  // Allow access to the login endpoint
+//                .requestMatchers("/login/admin").permitAll()  // Allow access to the login endpoint
 //                .anyRequest().authenticated()  // All other requests must be authenticated
 //                .and()
 //                .formLogin().disable(); // Disable Spring's default login page

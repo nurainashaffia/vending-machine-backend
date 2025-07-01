@@ -84,9 +84,6 @@ public class SlotService {
 
                 itemRepository.save(item);
             }
-//            } else {
-//                throw new IllegalArgumentException("Capacity inserted is lower than the current capacity");
-//            }
         }
 
         if (slotStatus != null) {

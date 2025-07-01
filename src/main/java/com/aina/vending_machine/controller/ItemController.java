@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@RequestMapping("/api/items")
+@RequestMapping("/items")
 @RestController
 @CrossOrigin
 public class ItemController {
