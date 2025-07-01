@@ -11,6 +11,9 @@ import com.aina.vending_machine.repository.SlotRepository;
 import com.aina.vending_machine.repository.TransactionRepository;
 import com.aina.vending_machine.exception.ResourceNotFoundException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +29,9 @@ public class TransactionService {
     private SlotRepository slotRepository;
 
     public Transaction createTransaction(Long itemId, Long slotId) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.of("Asia/Kuala_Lumpur"));
+        LocalDateTime malaysiaTime = zonedDateTime.toLocalDateTime();
+
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item not found with Id " + itemId));
 
@@ -39,7 +45,7 @@ public class TransactionService {
         } else if (slot.getCapacity() <= 0) {
             throw new InsufficientStockException("Insufficient stock for item with Id " + itemId);
         } else {
-            Transaction transaction = new Transaction(LocalDateTime.now(), item, slot);
+            Transaction transaction = new Transaction(malaysiaTime, item, slot);
             slot.setCapacity(slot.getCapacity() - 1);
             transactionRepository.save(transaction);
             return transaction;
